@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class InventoryManagement {
 
 	public static ArrayList<Product> createMenu(String folderName, String file) {
@@ -41,6 +42,7 @@ public class InventoryManagement {
 			System.out.println("I can't read!");
 			e.printStackTrace();
 		}
+		menuCreated.sort(new ProductCamparator());
 		return menuCreated;
 	}
 
