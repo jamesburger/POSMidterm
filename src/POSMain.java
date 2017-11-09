@@ -21,7 +21,7 @@ public class POSMain {
 		continueShopping = Validator.userChoice(scan);
 
 		shopMenu.add(new Product("Pickles", "super pickles", "seriously, the best pickles", 20.00, 50));
-		
+
 		while (continueShopping.equalsIgnoreCase("y")) {
 			System.out.println("Please select an item from our menu!!");
 			printArray(shopMenu);
@@ -32,9 +32,8 @@ public class POSMain {
 			shopCart = purchaseSelection(selectProductNumber, selectProductQuantity, shopCart, shopMenu);
 			System.out.println("would you like to continue shpping (y/n)");
 			continueShopping = Validator.userChoice(scan);
-		} 
-			
-		
+		}
+		new GrandTotal(shopCart);
 
 		// System.out.println(shopCart.get(0).getProductPrice());
 
@@ -43,12 +42,16 @@ public class POSMain {
 		// formated table for Cart
 
 		// TODO grab item quantity * item amount repeat for each item = subtotal
-		System.out.println("subtotal " + shopCart.get(0).getProductPrice());
+		System.out.println("Sub Total: " + GrandTotal.calculateSubTotal());
+		System.out.println("Sales Tax: " + GrandTotal.calculateSalesTax());
+		System.out.println("Total: " + GrandTotal.calculateGrandTotal());
+		// System.out.println("subtotal " + shopCart.get(0).getProductPrice());
 		// subTotal * .06 = salesTax
-		System.out.println("sales tax" + shopCart.get(0).getProductPrice() * (.06));
+		// System.out.println("sales tax" + shopCart.get(0).getProductPrice() * (.06));
 		// subTOtal + salesTax = GrandTotal
-		System.out.println(
-				"grand total" + (shopCart.get(0).getProductPrice() * (.06) + shopCart.get(0).getProductPrice()));
+		// System.out.println(
+		// "grand total" + (shopCart.get(0).getProductPrice() * (.06) +
+		// shopCart.get(0).getProductPrice()));
 
 		// Selecting payment type
 		System.out.println("Please select a payment type:  cash , card, check");
