@@ -6,8 +6,8 @@ public class Validator {
 	    public static String getString(Scanner sc, String prompt)
 	    {
 	        System.out.print(prompt);
-	        String s = sc.next();  // read user entry
-	        sc.nextLine();  // discard any other data entered on the line
+	        String s = sc.nextLine();  // read user entry
+	        // discard any other data entered on the line
 	        return s;
 	    }
 
@@ -99,7 +99,7 @@ public class Validator {
 				System.out.println("Please only enter 'y' or 'n':");
 				s = scan.next();
 			} 
-			System.out.println("Great!s");
+			System.out.println("Great!");
 				return s;
 				
 	}
