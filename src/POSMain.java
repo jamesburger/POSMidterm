@@ -35,23 +35,13 @@ public class POSMain {
 		}
 		new GrandTotal(shopCart);
 
-		// System.out.println(shopCart.get(0).getProductPrice());
-
 		System.out.println("shopping cart print " + shopCart);
-		// for loop add shop cart price
+
 		// formated table for Cart
 
-		// TODO grab item quantity * item amount repeat for each item = subtotal
 		System.out.println("Sub Total: " + GrandTotal.calculateSubTotal());
 		System.out.println("Sales Tax: " + GrandTotal.calculateSalesTax());
 		System.out.println("Total: " + GrandTotal.calculateGrandTotal());
-		// System.out.println("subtotal " + shopCart.get(0).getProductPrice());
-		// subTotal * .06 = salesTax
-		// System.out.println("sales tax" + shopCart.get(0).getProductPrice() * (.06));
-		// subTOtal + salesTax = GrandTotal
-		// System.out.println(
-		// "grand total" + (shopCart.get(0).getProductPrice() * (.06) +
-		// shopCart.get(0).getProductPrice()));
 
 		// Selecting payment type
 		System.out.println("Please select a payment type:  cash , card, check");
