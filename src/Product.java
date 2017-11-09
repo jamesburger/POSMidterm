@@ -10,6 +10,13 @@ public class Product {
 	Product(){
 		
 	}
+	
+	public Product(String productName, double productPrice, int productQty) {
+		super();
+		this.productName = productName;
+		this.productPrice = productPrice;
+		this.productQty = productQty;
+	}
 
 	public Product(String productName, String productType, String productDes, double productPrice, int productQty) {
 		super();
