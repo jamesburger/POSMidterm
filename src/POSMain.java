@@ -1,8 +1,12 @@
+
 /**
  * 
  * @author mperez
  * @author sbernardy
  * @author jburger
+ * 
+ * Developed by "Two Beards and a Smile."
+ * Samuel Bernardy, Marcus J. Perez, and James Burger.
  * 
  * Point of Sale demonstration program for Grand Circus Java Developer Bootcamp.
  * This program will accept manual entry of employ credentials, admin menu, 
@@ -100,10 +104,10 @@ public class POSMain {
 
 	public static void printArray(ArrayList<Product> shopMenu) {
 
-		System.out.printf("%-3s %-70s %-15s %-70s %-10s %-10s\n\n\n", "No.", "Product", "Category", "Description",
+		System.out.printf("%-3s %-70s %-25s %-60s %10s %10s\n\n\n", "No.", "Product", "Category", "Description",
 				"Price", "InStock");
 		for (int i = 0; i < shopMenu.size(); ++i) {
-			System.out.printf("%-3s %-70s %-15s %-70s %10.2f %-10s\n", i + 1, shopMenu.get(i).getProductName(),
+			System.out.printf("%-3s %-70s %-25s %-60s %10.2f %10s\n", i + 1, shopMenu.get(i).getProductName(),
 					shopMenu.get(i).getProductType(), shopMenu.get(i).getProductDes(),
 					shopMenu.get(i).getProductPrice(), shopMenu.get(i).getProductQty());
 
