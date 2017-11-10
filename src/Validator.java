@@ -137,7 +137,6 @@ public class Validator {
 				System.out.println("Please only enter 'y' or 'n':");
 				s = scan.next();
 			} 
-			System.out.println("Great!");
 				return s;
 				
 	}
