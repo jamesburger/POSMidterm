@@ -70,4 +70,28 @@ public class InventoryManagement {
 
 	}
 
+	public static void updateInventory(ArrayList<Product> newInventory, String folderName, String file) {
+
+		// identify path
+		Path writeFile = Paths.get(folderName, file);
+		File fileName = writeFile.toFile();
+
+		try {
+
+			// init writer
+			PrintWriter out = new PrintWriter(new FileOutputStream(fileName, false));
+
+			// accept formatted inventory addition
+			for (int i = 0; i < newInventory.size(); i++) {
+				out.println(newInventory.get(i).getProductName() + ", " + newInventory.get(i).getProductType() + ", " + newInventory.get(i).getProductDes() + ", " + newInventory.get(i).getProductPrice() + ", " + newInventory.get(i).getProductQty());
+			}
+			out.close();
+
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+		}
+
+	}
+
 }
