@@ -1,3 +1,16 @@
+/**
+ * 
+ * @author mperez
+ * @author sbernardy
+ * @author jburger
+ * 
+ * Point of Sale demonstration program for Grand Circus Java Developer Bootcamp.
+ * This program will accept manual entry of employ credentials, admin menu, 
+ * and inventory management with a text file representation. 
+ * The program will also simulate card, check, and cash transactions.
+ * 
+ */
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
