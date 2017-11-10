@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-import org.omg.Messaging.SyncScopeHelper;
-
 public class POSMain {
 
 	public static void main(String[] args) {
@@ -81,41 +79,34 @@ public class POSMain {
 			continueShopping = Validator.userChoice(scan);
 		}
 		new GrandTotal(shopCart);
-		// print shopping cart
-		System.out.println("Current shopping cart:");
-		printArray(shopCart);
-		Coupon couponCode = new Coupon();
-		// formated table for Cart
+		// prompt coupon entry
 		System.out.println("Do you have a coupon today? (y/n): ");
 		String couponValidate = Validator.userChoice(scan);
 		if (couponValidate.equalsIgnoreCase("y")) {
 			int userCouponCode = Validator.getInt(scan, "Please enter your coupon code: ", 00000, 99999);
 			if (userCouponCode == 56478) {
-				
+
 				System.out.println("Sub Total: " + GrandTotal.calculateSubTotal());
 				System.out.println("Sales Tax: " + GrandTotal.calculateSalesTax());
-				System.out.println("Total: " + (GrandTotal.calculateGrandTotal() - (GrandTotal.calculateGrandTotal()*0.1)));
+				System.out.println(
+						"Total: " + (GrandTotal.calculateGrandTotal() - (GrandTotal.calculateGrandTotal() * 0.1)));
 
 			} else {
 				System.out.println("That is not a valid coupon code");
 			}
-			
-		} else {
-			printAllTotals();
-			
 		}
+		// print shopping cart
+		System.out.println("Current shopping cart:");
+		printCart(shopCart);
+		Coupon couponCode = new Coupon();
+		// formated table for Cart
 
 		printPayment(paymentType);
-		/*
-		 * TODO if cash tender with change if card take Name/Number/expiration/CVV if
-		 * check take check#/name
-		 */
-
-		System.out.println(" Receipt ");
-		printArray(shopCart);
 		paymentType(scan);
-		couponCode.couponGenerator(shopCart);
-		
+
+		if (couponValidate.equals("n")) {
+			printCoupon();
+		}
 		/*
 		 * TODO repeat grandTotal Method print payment method give change last 4 of
 		 * credit card + name check# +
@@ -131,7 +122,7 @@ public class POSMain {
 
 	public static void paymentType(Scanner scan) {
 		int selectPayment;
-		selectPayment = Validator.getInt(scan, "How is this being paid?", 1, 3);
+		selectPayment = Validator.getInt(scan, "\nHow is this being paid?", 1, 3);
 		if (selectPayment == 1) {
 			Payment cashing = new Cash();
 			cashing.setPaid(Validator.getDouble(scan, "Enter amount tendered.", GrandTotal.calculateGrandTotal(),
@@ -170,6 +161,31 @@ public class POSMain {
 		}
 	}
 
+	public static void printCart(ArrayList<Product> shopCart) {
+
+		System.out.printf("%-70s %10s %10s\n\n\n", "Product", "Price", "Quantity");
+		for (int i = 0; i < shopCart.size(); ++i) {
+			System.out.printf("%-70s %10s %10s\n", shopCart.get(i).getProductName(), shopCart.get(i).getProductPrice(),
+					shopCart.get(i).getProductQty());
+
+		}
+	}
+
+	public static void printReceipt(ArrayList<Product> shopCart) {
+
+		System.out.printf("%-70s %10s %10s\n\n\n", "Product", "Price", "Quantity");
+		for (int i = 0; i < shopCart.size(); ++i) {
+			System.out.printf("%-70s %10s %10s\n", shopCart.get(i).getProductName(), shopCart.get(i).getProductPrice(),
+					shopCart.get(i).getProductQty());
+
+		}
+		System.out.printf("%-60s %-30s\n", "", "Checkout");
+		System.out.printf("%-60s %-30s\n", "", "========");
+		System.out.printf("%-60s %-20s %-10.2f\n", "", "Sub Total: ", GrandTotal.calculateSubTotal());
+		System.out.printf("%-60s %-20s %-10.2f\n", "", "Tax: ", GrandTotal.calculateSalesTax());
+		System.out.printf("%-60s %-20s %-10.2f\n\n", "", "Sub Total: ", GrandTotal.calculateGrandTotal());
+	}
+
 	public static ArrayList<Product> purchaseSelection(int selectProductNumber, int selectProductQuantity,
 			ArrayList<Product> shopCart, ArrayList<Product> shopMenu) {
 
@@ -185,7 +201,34 @@ public class POSMain {
 	public static void printPayment(String[] paymentMenu) {
 
 		for (int i = 0; i < paymentMenu.length; i++) {
-			System.out.println((i + 1) + paymentMenu[i]);
+			System.out.println("\n" + (i + 1) + paymentMenu[i]);
+		}
+	}
+
+	public static void printCoupon() {
+		String couponGraphic = "::: : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : :::\n"
+				+ "::   :::: ::::         :::     :::  ::::::::  :::    :::  ::::::::  :::    ::: :::::::::: :::::::::          :::: ::::   ::\n"
+				+ "::  :+:  :+:  :+:      :+:     :+: :+:    :+: :+:    :+: :+:    :+: :+:    :+: :+:        :+:    :+:      :+:  :+:  :+:  ::\n"
+				+ "::  +:+  +:+           +:+     +:+ +:+    +:+ +:+    +:+ +:+        +:+    +:+ +:+        +:+    +:+           +:+  +:+  ::\n"
+				+ "::+#+  +#+             +#+     +:+ +#+    +:+ +#+    +:+ +#+        +#++:++#++ +#++:++#   +#++:++#:              +#+  +#+::\n"
+				+ "::  +#+  +#+            +#+   +#+  +#+    +#+ +#+    +#+ +#+        +#+    +#+ +#+        +#+    +#+           +#+  +#+  ::\n"
+				+ "::  #+#  #+#  #+#        #+#+#+#   #+#    #+# #+#    #+# #+#    #+# #+#    #+# #+#        #+#    #+#      #+#  #+#  #+#  ::\n"
+				+ "::   #### ####             ###      ########   ########   ########  ###    ### ########## ###    ###         #### ####   ::\n"
+				+ "::   :::: ::::                                                                                               :::: ::::   ::\n"
+				+ "::  :+:  :+:  :+:                                                                                         :+:  :+:  :+:  ::\n"
+				+ "::  +:+  +:+                      **            We hope to see you again!              **                      +:+  +:+  ::\n"
+				+ "::+#+  +#+                        **                Coupon code: 56478                 **                        +#+  +#+::\n"
+				+ "::  +#+  +#+                      **Come again soon, and for a limited time you'll get **                      +#+  +#+  ::\n"
+				+ "::  #+#  #+#  #+#                 **            10% off your next purchase             **                 #+#  #+#  #+#  ::\n"
+				+ "::   #### #### : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : #### ####   ::\n";
+		String[] couponGen = couponGraphic.split("\n");
+		for (String line : couponGen) {
+			System.out.println(line);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
