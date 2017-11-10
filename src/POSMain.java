@@ -84,15 +84,28 @@ public class POSMain {
 		// print shopping cart
 		System.out.println("Current shopping cart:");
 		printArray(shopCart);
-
+		Coupon couponCode = new Coupon();
 		// formated table for Cart
-		System.out.println("Sub Total: " + GrandTotal.calculateSubTotal());
-		System.out.println("Sales Tax: " + GrandTotal.calculateSalesTax());
-		System.out.println("Total: " + GrandTotal.calculateGrandTotal());
+		System.out.println("Do you have a coupon today? (y/n): ");
+		String couponValidate = Validator.userChoice(scan);
+		if (couponValidate.equalsIgnoreCase("y")) {
+			int userCouponCode = Validator.getInt(scan, "Please enter your coupon code: ", 00000, 99999);
+			if (userCouponCode == 56478) {
+				
+				System.out.println("Sub Total: " + GrandTotal.calculateSubTotal());
+				System.out.println("Sales Tax: " + GrandTotal.calculateSalesTax());
+				System.out.println("Total: " + (GrandTotal.calculateGrandTotal() - (GrandTotal.calculateGrandTotal()*0.1)));
 
-		// Selecting payment type
+			} else {
+				System.out.println("That is not a valid coupon code");
+			}
+			
+		} else {
+			printAllTotals();
+			
+		}
+
 		printPayment(paymentType);
-		
 		/*
 		 * TODO if cash tender with change if card take Name/Number/expiration/CVV if
 		 * check take check#/name
@@ -100,31 +113,49 @@ public class POSMain {
 
 		System.out.println(" Receipt ");
 		printArray(shopCart);
-		selectPayment = Validator.getInt(scan, "How is this being paid?", 1, 3);
-		if (selectPayment == 1) {
-			Payment cashing = new Cash();
-			cashing.setPaid(Validator.getDouble(scan, "Enter amount tendered.", GrandTotal.calculateGrandTotal(), Double.MAX_VALUE));
-			
-			System.out.println(cashing.getPaid());
-		} else if (selectPayment == 2) {
-			Payment carding = new CreditCard((Validator.getString(scan, "Enter Name on Card: ")), (Validator.getLong(scan, "Enter Card Number:", 1000000000000000l, 9999999999999999l)),
-					Validator.getInt(scan, "Enter expiration month", 1, 12), Validator.getInt(scan, "enter expiration year", 17, 30), Validator.getInt(scan, "Enter CVV", 1, 999));
-			
-			System.out.println(carding.getIdNum() + carding.getName() + carding.getCvv() + carding.getExpirationMonth() + carding.getExpirationYear());
-			
-		} else {
-			Payment checking = new Check();
-			checking.setRouteNum(Validator.getLong(scan, "Enter Routing Number:   ", 000000001l , 999999999l ));
-			checking.setAccNum(Validator.getLong(scan, "Enter Account number:   ", 000000000001l, 999999999999l));
-			checking.setIdNum(Validator.getInt(scan, "Enter check number:   ", 1, 999999999));
-			
-			System.out.println(checking.getRouteNum() + checking.getAccNum() + checking.getIdNum());
-		}
+		paymentType(scan);
+		couponCode.couponGenerator(shopCart);
+		
 		/*
 		 * TODO repeat grandTotal Method print payment method give change last 4 of
 		 * credit card + name check# +
 		 */
 
+	}
+
+	public static void printAllTotals() {
+		System.out.println("Sub Total: " + GrandTotal.calculateSubTotal());
+		System.out.println("Sales Tax: " + GrandTotal.calculateSalesTax());
+		System.out.println("Total: " + GrandTotal.calculateGrandTotal());
+	}
+
+	public static void paymentType(Scanner scan) {
+		int selectPayment;
+		selectPayment = Validator.getInt(scan, "How is this being paid?", 1, 3);
+		if (selectPayment == 1) {
+			Payment cashing = new Cash();
+			cashing.setPaid(Validator.getDouble(scan, "Enter amount tendered.", GrandTotal.calculateGrandTotal(),
+					Double.MAX_VALUE));
+
+			System.out.println(cashing.getPaid());
+		} else if (selectPayment == 2) {
+			Payment carding = new CreditCard((Validator.getString(scan, "Enter Name on Card: ")),
+					(Validator.getLong(scan, "Enter Card Number:", 1000000000000000l, 9999999999999999l)),
+					Validator.getInt(scan, "Enter expiration month", 1, 12),
+					Validator.getInt(scan, "enter expiration year", 17, 30),
+					Validator.getInt(scan, "Enter CVV", 1, 999));
+
+			System.out.println(carding.getIdNum() + carding.getName() + carding.getCvv() + carding.getExpirationMonth()
+					+ carding.getExpirationYear());
+
+		} else {
+			Payment checking = new Check();
+			checking.setRouteNum(Validator.getLong(scan, "Enter Routing Number:   ", 000000001l, 999999999l));
+			checking.setAccNum(Validator.getLong(scan, "Enter Account number:   ", 000000000001l, 999999999999l));
+			checking.setIdNum(Validator.getInt(scan, "Enter check number:   ", 1, 999999999));
+
+			System.out.println(checking.getRouteNum() + checking.getAccNum() + checking.getIdNum());
+		}
 	}
 
 	public static void printArray(ArrayList<Product> shopMenu) {
@@ -152,7 +183,7 @@ public class POSMain {
 	}
 
 	public static void printPayment(String[] paymentMenu) {
-		
+
 		for (int i = 0; i < paymentMenu.length; i++) {
 			System.out.println((i + 1) + paymentMenu[i]);
 		}
