@@ -32,30 +32,42 @@ public class POSMain {
 		boolean allowed = false;
 		String[] paymentType = { "Cash", "Card", "Check" };
 		int selectPayment = 0;
+		
+
+		// import inventory
+		shopMenu = InventoryManagement.createMenu("ProductLists", "Inventory.txt");
 
 		// List of employ profiles. Admin has inventory access.
 		HashMap<String, String> login = new HashMap<String, String>();
-		login.put("empl1201", "Qwerty!");
+		login.put("test", "test");
 		login.put("empl1202", "QWerty!");
 		login.put("empl1203", "QwErty!");
 		login.put("empl1204", "QweRty!");
 		login.put("empl1205", "QwerTy!");
-		login.put("log_admin", "QwertY!");
+		login.put("log_admin", "Pickles!");
 
 		// auth and access admin options
 		while (!allowed) {
 			String enteredID = Validator.getString(scan, "USER_ID:   ");
 			String enteredPass = Validator.getString(scan, "USED_PASS:   ");
 			if (enteredPass.equals(login.get(enteredID))) {
-				if (enteredID.equals("log_admin")) {
-					while ((Validator.getChar(scan, "Would you like to add or remove an inventory item?(a/r/n)", "a",
-							"r", "n")).equals("a")) {
-
+				while (enteredID.equals("log_admin")) {
+					String adminChoice = Validator.getChar(scan,
+							"Would you like to add or remove an inventory item?(a/r/n)", "a", "r", "n");
+					if (adminChoice.equals("a")) {
 						InventoryManagement.writeProduct(scan, "ProductLists", "inventory.txt");
 					}
+					if (adminChoice.equals("r")) {
+						printArray(shopMenu);
+						InventoryManagement.removeProduct(scan, shopMenu);
+						InventoryManagement.updateInventory(shopMenu, "ProductLists", "inventory.txt");
+					}
+					if (adminChoice.equals("n")) {
+						allowed = true;
+					}
 				}
-				allowed = true;
-			}
+				
+			}allowed = true;
 		}
 		// confirm log in
 		System.out.println("You have successfully logged in to checkout service.");
@@ -65,8 +77,6 @@ public class POSMain {
 		// shopMenu.add(new Product("Pickles", "super pickles", "seriously, the best
 		// pickles", 20.00, 50));
 
-		// import inventory
-		shopMenu = InventoryManagement.createMenu("ProductLists", "Inventory.txt");
 
 		// begin checkout process
 		while (continueShopping.equalsIgnoreCase("y")) {
@@ -96,22 +106,36 @@ public class POSMain {
 			}
 		}
 		// print shopping cart
-		System.out.println("Current shopping cart:");
+		System.out.println("\n" + "Current shopping cart:");
 		printCart(shopCart);
-		Coupon couponCode = new Coupon();
+
 		// formated table for Cart
 
 		printPayment(paymentType);
-		paymentType(scan);
+		int payTypeID = paymentType();
 
-		if (couponValidate.equals("n")) {
-			printCoupon();
-		}
+		// System.out.println(payTypeID + " LOOK HERE!!!!!!!!");
+	
+		
 		/*
 		 * TODO repeat grandTotal Method print payment method give change last 4 of
 		 * credit card + name check# +
 		 */
+		
+				
+		
+		
+		
+		
+		printReceipt(shopCart);
 
+		Coupon couponCode = new Coupon();
+		if (couponValidate.equals("n")) {
+			printCoupon();
+		}
+
+		
+		InventoryManagement.updateInventory(shopMenu, "ProductLists", "inventory.txt");
 	}
 
 	public static void printAllTotals() {
@@ -120,15 +144,18 @@ public class POSMain {
 		System.out.println("Total: " + GrandTotal.calculateGrandTotal());
 	}
 
-	public static void paymentType(Scanner scan) {
+	public static int paymentType() {
 		int selectPayment;
-		selectPayment = Validator.getInt(scan, "\nHow is this being paid?", 1, 3);
+		Scanner scan = new Scanner(System.in);
+		selectPayment = Validator.getInt(scan, "\n", 1, 3);
 		if (selectPayment == 1) {
 			Payment cashing = new Cash();
 			cashing.setPaid(Validator.getDouble(scan, "Enter amount tendered.", GrandTotal.calculateGrandTotal(),
 					Double.MAX_VALUE));
 
-			System.out.println(cashing.getPaid());
+			System.out.println("\nCash recieved: " +  cashing.getPaid()+ "\n\n\n\n");
+			printReceiptBanner();
+			System.out.println(" Your change is : " + (cashing.getPaid() -  (GrandTotal.calculateGrandTotal())));
 		} else if (selectPayment == 2) {
 			Payment carding = new CreditCard((Validator.getString(scan, "Enter Name on Card: ")),
 					(Validator.getLong(scan, "Enter Card Number:", 1000000000000000l, 9999999999999999l)),
@@ -136,8 +163,10 @@ public class POSMain {
 					Validator.getInt(scan, "enter expiration year", 17, 30),
 					Validator.getInt(scan, "Enter CVV", 1, 999));
 
-			System.out.println(carding.getIdNum() + carding.getName() + carding.getCvv() + carding.getExpirationMonth()
-					+ carding.getExpirationYear());
+			//System.out.println(carding.getIdNum() + carding.getName() + carding.getCvv() + carding.getExpirationMonth()
+					//+ carding.getExpirationYear());
+			printReceiptBanner();
+			System.out.println("\n\n\n\nThank you " + carding.getName() + " for shopping with us today!");
 
 		} else {
 			Payment checking = new Check();
@@ -145,8 +174,11 @@ public class POSMain {
 			checking.setAccNum(Validator.getLong(scan, "Enter Account number:   ", 000000000001l, 999999999999l));
 			checking.setIdNum(Validator.getInt(scan, "Enter check number:   ", 1, 999999999));
 
-			System.out.println(checking.getRouteNum() + checking.getAccNum() + checking.getIdNum());
+			//System.out.println(checking.getRouteNum() + checking.getAccNum() + checking.getIdNum());
+			printReceiptBanner();
+			System.out.println("\n\n\n\nThank you for shopping with us today!");
 		}
+		return selectPayment;
 	}
 
 	public static void printArray(ArrayList<Product> shopMenu) {
@@ -183,7 +215,7 @@ public class POSMain {
 		System.out.printf("%-60s %-30s\n", "", "========");
 		System.out.printf("%-60s %-20s %-10.2f\n", "", "Sub Total: ", GrandTotal.calculateSubTotal());
 		System.out.printf("%-60s %-20s %-10.2f\n", "", "Tax: ", GrandTotal.calculateSalesTax());
-		System.out.printf("%-60s %-20s %-10.2f\n\n", "", "Sub Total: ", GrandTotal.calculateGrandTotal());
+		System.out.printf("%-60s %-20s %-10.2f\n\n", "", " Total: ", GrandTotal.calculateGrandTotal());
 	}
 
 	public static ArrayList<Product> purchaseSelection(int selectProductNumber, int selectProductQuantity,
@@ -199,9 +231,9 @@ public class POSMain {
 	}
 
 	public static void printPayment(String[] paymentMenu) {
-
+		System.out.println("\nHow is this being paid?(Select: 1 , 2 , 3 )");
 		for (int i = 0; i < paymentMenu.length; i++) {
-			System.out.println("\n" + (i + 1) + paymentMenu[i]);
+			System.out.println("\n" + (i + 1) + ". " + paymentMenu[i] + ": ");
 		}
 	}
 
@@ -223,6 +255,25 @@ public class POSMain {
 				+ "::   #### #### : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : #### ####   ::\n";
 		String[] couponGen = couponGraphic.split("\n");
 		for (String line : couponGen) {
+			System.out.println(line);
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	public static void printReceiptBanner() {
+		String receiptGraphic =
+				":::::::::  :::::::::: ::::::::  :::::::::: ::::::::::: ::::::::: ::::::::::: \n" + 
+				":+:    :+: :+:       :+:    :+: :+:            :+:     :+:    :+:    :+:     \n" + 
+				"+:+    +:+ +:+       +:+        +:+            +:+     +:+    +:+    +:+     \n" + 
+				"+#++:++#:  +#++:++#  +#+        +#++:++#       +#+     +#++:++#+     +#+     \n" + 
+				"+#+    +#+ +#+       +#+        +#+            +#+     +#+           +#+     \n" + 
+				"#+#    #+# #+#       #+#    #+# #+#            #+#     #+#           #+#     \n" + 
+				"###    ### ########## ########  ########## ########### ###           ###     ";
+		String[] receiptGen = receiptGraphic.split("\n");
+		for (String line : receiptGen) {
 			System.out.println(line);
 			try {
 				Thread.sleep(100);
