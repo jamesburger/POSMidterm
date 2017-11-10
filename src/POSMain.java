@@ -9,9 +9,7 @@ public class POSMain {
 		ArrayList<Product> shopCart = new ArrayList<Product>(1);
 		Scanner scan = new Scanner(System.in);
 
-		int i;
 		int selectProductNumber;
-		int itemQuantity;
 		int selectProductQuantity;
 		String continueShopping = "";
 		boolean allowed = false;
@@ -73,17 +71,17 @@ public class POSMain {
 
 		// Selecting payment type
 		System.out.println("Please select a payment type:  cash , card, check");
-		// if cash tender with change
-		// if card take Name/Number/expiration/CVV
-		// if check take check#/name
+		/*
+		 * TODO if cash tender with change if card take Name/Number/expiration/CVV if
+		 * check take check#/name
+		 */
 
 		System.out.println(" Receipt ");
 		printArray(shopCart);
-		// repeat grandTotal Method
-		// print payment method
-		// give change
-		// last 4 of credit card + name
-		// check# +
+		/*
+		 * TODO repeat grandTotal Method print payment method give change last 4 of
+		 * credit card + name check# +
+		 */
 
 	}
 
