@@ -14,6 +14,9 @@ public class POSMain {
 		int itemQuantity;
 		int selectProductQuantity;
 		String continueShopping = "";
+		boolean allowed = false;
+
+		// List of employ profiles. Admin has inventory access.
 		HashMap<String, String> login = new HashMap<String, String>();
 		login.put("empl1201", "Qwerty!");
 		login.put("empl1202", "QWerty!");
@@ -22,47 +25,48 @@ public class POSMain {
 		login.put("empl1205", "QwerTy!");
 		login.put("log_admin", "QwertY!");
 
-		boolean allowed = false;
+		// auth and access admin options
 		while (!allowed) {
 			String enteredID = Validator.getString(scan, "USER_ID:   ");
 			String enteredPass = Validator.getString(scan, "USED_PASS:   ");
 			if (enteredPass.equals(login.get(enteredID))) {
 				if (enteredID.equals("log_admin")) {
-					while ((Validator.getChar(scan, "Would you like to add or remove inventory items?(a/r/n)", "a", "r",
-							"n")).equals("a")) {
+					while ((Validator.getChar(scan, "Would you like to add or remove an inventory item?(a/r/n)", "a",
+							"r", "n")).equals("a")) {
+
 						InventoryManagement.writeProduct(scan, "ProductLists", "inventory.txt");
 					}
 				}
 				allowed = true;
 			}
 		}
-		System.out.println("You have successfully logged in.");
-		System.out.println("Would you like to scan an item?(y/n)");
+		// confirm log in
+		System.out.println("You have successfully logged in to checkout service.");
+		System.out.println("Add an item to the cart? (y/n)");
 		continueShopping = Validator.userChoice(scan);
 
 		// shopMenu.add(new Product("Pickles", "super pickles", "seriously, the best
 		// pickles", 20.00, 50));
+
+		// import inventory
 		shopMenu = InventoryManagement.createMenu("ProductLists", "Inventory.txt");
 
+		// begin checkout process
 		while (continueShopping.equalsIgnoreCase("y")) {
-			System.out.println("Please select an item from our menu!!");
 			printArray(shopMenu);
-			selectProductNumber = Validator.getInt(scan, "Please select the item you'd like to add to your cart!", 1,
-					shopMenu.size());
-			selectProductQuantity = Validator.getInt(scan,
-					"Please enter the number of the item you'd like to add to your cart", 1,
+			selectProductNumber = Validator.getInt(scan, "Choose an item to add to the cart.", 1, shopMenu.size());
+			selectProductQuantity = Validator.getInt(scan, "Choose a quantity to add.", 1,
 					shopMenu.get(0).getProductQty());
 			shopCart = purchaseSelection(selectProductNumber, selectProductQuantity, shopCart, shopMenu);
-			System.out.println("would you like to continue shpping (y/n)");
+			System.out.println("Would you like to add another item to the cart? (y/n)");
 			continueShopping = Validator.userChoice(scan);
 		}
 		new GrandTotal(shopCart);
-
-		System.out.println("Current Shopping Cart:   ");
+		// print shopping cart
+		System.out.println("Current shopping cart:");
 		printArray(shopCart);
 
 		// formated table for Cart
-
 		System.out.println("Sub Total: " + GrandTotal.calculateSubTotal());
 		System.out.println("Sales Tax: " + GrandTotal.calculateSalesTax());
 		System.out.println("Total: " + GrandTotal.calculateGrandTotal());
@@ -84,10 +88,12 @@ public class POSMain {
 	}
 
 	public static void printArray(ArrayList<Product> shopMenu) {
+
 		System.out.printf("%-3s %-70s %-15s %-70s %-10s %-10s\n\n\n", "No.", "Product", "Category", "Description",
 				"Price", "InStock");
 		for (int i = 0; i < shopMenu.size(); ++i) {
-			System.out.printf("%-3s %-70s %-15s %-70s %-10.2f %-10s\n", i + 1, shopMenu.get(i).getProductName(), shopMenu.get(i).getProductType(), shopMenu.get(i).getProductDes(),
+			System.out.printf("%-3s %-70s %-15s %-70s %10.2f %-10s\n", i + 1, shopMenu.get(i).getProductName(),
+					shopMenu.get(i).getProductType(), shopMenu.get(i).getProductDes(),
 					shopMenu.get(i).getProductPrice(), shopMenu.get(i).getProductQty());
 
 		}

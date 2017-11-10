@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-
 public class InventoryManagement {
 
 	public static ArrayList<Product> createMenu(String folderName, String file) {
@@ -19,18 +18,18 @@ public class InventoryManagement {
 		String parsedLine = "";
 		ArrayList<Product> menuCreated = new ArrayList<Product>();
 
+		// identify path
 		Path writeFile = Paths.get(folder, fileName);
 		File inventoryFile = writeFile.toFile();
 
 		try {
+
+			// init reader
 			FileReader fr = new FileReader(inventoryFile);
-			// this is a buffer and the benefit of using this is to store a block of memory
-			// that we can read data from later
-			// -- more efficient than Scanner and it will not cause errors
 			BufferedReader reader = new BufferedReader(fr);
-			// this is attempting to read the first line from the text docu
 			String line = reader.readLine();
 
+			// comb inventory and parse Product fields
 			while (line != null) {
 				parsedLine = line.toString();
 				String[] productFields = parsedLine.split(", ");
@@ -42,17 +41,26 @@ public class InventoryManagement {
 			System.out.println("I can't read!");
 			e.printStackTrace();
 		}
+
+		// sort inventory in menu ArrayList
 		menuCreated.sort(new ProductCamparator());
 		return menuCreated;
 	}
 
 	public static void writeProduct(Scanner scannerName, String folderName, String file) {
+
+		// identify path
 		Path writeFile = Paths.get(folderName, file);
 		File fileName = writeFile.toFile();
 
 		try {
+
+			// init writer
 			PrintWriter out = new PrintWriter(new FileOutputStream(fileName, true));
-			out.println(Validator.getString(scannerName, "Enter a Product: <Product name>, <Category>, <Description>, <Price>, <Inventory>\n"));
+
+			// accept formatted inventory addition
+			out.println(Validator.getString(scannerName,
+					"Enter a Product: <Product name>, <Category>, <Description>, <Price>, <Inventory>\n"));
 			out.close();
 
 		} catch (FileNotFoundException e) {
@@ -62,11 +70,4 @@ public class InventoryManagement {
 
 	}
 
-	public static void main(String[] args) {
-		Scanner scan = new Scanner(System.in);
-			writeProduct(scan,"ProductLists", "inventory.txt");
-		for (Product line : createMenu("ProductLists", "inventory.txt")) {
-			System.out.println(line);
-		}
-	}
 }
