@@ -93,5 +93,9 @@ public class InventoryManagement {
 		}
 
 	}
+	public static void removeProduct(Scanner scanner, ArrayList<Product> shopMenu) {
+		int choice = Validator.getInt(scanner, "Which item would you like to remove? (Product No.)", 1, shopMenu.size());
+		shopMenu.remove(choice - 1);
+	}
 
 }
