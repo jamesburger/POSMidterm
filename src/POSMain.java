@@ -39,6 +39,7 @@ public class POSMain {
 
 		// List of employ profiles. Admin has inventory access.
 		HashMap<String, String> login = new HashMap<String, String>();
+		login.put("LOGGED",  "LOGGED");
 		login.put("test", "test");
 		login.put("empl1202", "QWerty!");
 		login.put("empl1203", "QwErty!");
@@ -56,6 +57,7 @@ public class POSMain {
 							"Would you like to add or remove an inventory item?(a/r/n)", "a", "r", "n");
 					if (adminChoice.equals("a")) {
 						InventoryManagement.writeProduct(scan, "ProductLists", "inventory.txt");
+						InventoryManagement.updateInventory(shopMenu, "ProductLists", "inventory.txt");
 					}
 					if (adminChoice.equals("r")) {
 						printArray(shopMenu);
@@ -63,7 +65,7 @@ public class POSMain {
 						InventoryManagement.updateInventory(shopMenu, "ProductLists", "inventory.txt");
 					}
 					if (adminChoice.equals("n")) {
-						allowed = true;
+						enteredID.equals("LOGGED");
 					}
 				}
 				
@@ -153,9 +155,9 @@ public class POSMain {
 			cashing.setPaid(Validator.getDouble(scan, "Enter amount tendered.", GrandTotal.calculateGrandTotal(),
 					Double.MAX_VALUE));
 
-			System.out.println("\nCash recieved: " +  cashing.getPaid()+ "\n\n\n\n");
+			System.out.println("\nCash recieved: " + cashing.getPaid() + "\n\n\n\n");
 			printReceiptBanner();
-			System.out.println(" Your change is : " + (cashing.getPaid() -  (GrandTotal.calculateGrandTotal())));
+			System.out.println(" Your change is : " + (cashing.getPaid() - (GrandTotal.calculateGrandTotal())));
 		} else if (selectPayment == 2) {
 			Payment carding = new CreditCard((Validator.getString(scan, "Enter Name on Card: ")),
 					(Validator.getLong(scan, "Enter Card Number:", 1000000000000000l, 9999999999999999l)),
@@ -163,8 +165,9 @@ public class POSMain {
 					Validator.getInt(scan, "enter expiration year", 17, 30),
 					Validator.getInt(scan, "Enter CVV", 1, 999));
 
-			//System.out.println(carding.getIdNum() + carding.getName() + carding.getCvv() + carding.getExpirationMonth()
-					//+ carding.getExpirationYear());
+			// System.out.println(carding.getIdNum() + carding.getName() + carding.getCvv()
+			// + carding.getExpirationMonth()
+			// + carding.getExpirationYear());
 			printReceiptBanner();
 			System.out.println("\n\n\n\nThank you " + carding.getName() + " for shopping with us today!");
 
@@ -174,7 +177,8 @@ public class POSMain {
 			checking.setAccNum(Validator.getLong(scan, "Enter Account number:   ", 000000000001l, 999999999999l));
 			checking.setIdNum(Validator.getInt(scan, "Enter check number:   ", 1, 999999999));
 
-			//System.out.println(checking.getRouteNum() + checking.getAccNum() + checking.getIdNum());
+			// System.out.println(checking.getRouteNum() + checking.getAccNum() +
+			// checking.getIdNum());
 			printReceiptBanner();
 			System.out.println("\n\n\n\nThank you for shopping with us today!");
 		}
@@ -263,15 +267,17 @@ public class POSMain {
 			}
 		}
 	}
+
 	public static void printReceiptBanner() {
-		String receiptGraphic =
-				":::::::::  :::::::::: ::::::::  :::::::::: ::::::::::: ::::::::: ::::::::::: \n" + 
-				":+:    :+: :+:       :+:    :+: :+:            :+:     :+:    :+:    :+:     \n" + 
-				"+:+    +:+ +:+       +:+        +:+            +:+     +:+    +:+    +:+     \n" + 
-				"+#++:++#:  +#++:++#  +#+        +#++:++#       +#+     +#++:++#+     +#+     \n" + 
-				"+#+    +#+ +#+       +#+        +#+            +#+     +#+           +#+     \n" + 
-				"#+#    #+# #+#       #+#    #+# #+#            #+#     #+#           #+#     \n" + 
-				"###    ### ########## ########  ########## ########### ###           ###     ";
+		String receiptGraphic = "::: : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : : :: : : : : : : : : : : : : : : : : : :::\n"
+				+ "::   :::: ::::                :::::::::  :::::::::: ::::::::  :::::::::: ::::::::::: ::::::::: :::::::::::      :::: ::::   ::\n"
+				+ "::  :+:  :+:  :+: 			:+:    :+: :+:       :+:    :+: :+:            :+:     :+:    :+:    :+:       :+:  :+:  :+:  ::\n"
+				+ "::  +:+  +:+      			+:+    +:+ +:+       +:+        +:+            +:+     +:+    +:+    +:+            +:+  +:+  ::\n"
+				+ "::+#+  +#+        			+#++:++#:  +#++:++#  +#+        +#++:++#       +#+     +#++:++#+     +#+              +#+  +#+::\n"
+				+ "::  +#+  +#+      			+#+    +#+ +#+       +#+        +#+            +#+     +#+           +#+            +#+  +#+  ::\n"
+				+ "::  #+#  #+#  #+# 			#+#    #+# #+#       #+#    #+# #+#            #+#     #+#           #+#       #+#  #+#  #+#  ::\n"
+				+ "::   #### ####    			###    ### ########## ########  ########## ########### ###           ###          #### ####   ::\n"
+				+ "::   #### #### : : : : : : : : : : : : : : : : : : : : : : : : : : :  : : : : : : : : : : : : : : : : : : : : : #### ####   ::\n";
 		String[] receiptGen = receiptGraphic.split("\n");
 		for (String line : receiptGen) {
 			System.out.println(line);
