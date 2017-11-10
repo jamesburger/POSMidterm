@@ -92,7 +92,45 @@ public class Validator {
 	        }
 	        return d;
 	    }
-	    
+	    public static long getLong(Scanner sc, String prompt)
+	    {
+	        long d = 0;
+	        boolean isValid = false;
+	        while (isValid == false)
+	        {
+	            System.out.print(prompt);
+	            if (sc.hasNextLong())
+	            {
+	                d = sc.nextLong();
+	                isValid = true;
+	            }
+	            else
+	            {
+	                System.out.println("Error! Invalid decimal value. Try again.");
+	            }
+	            sc.nextLine();  // discard any other data entered on the line
+	        }
+	        return d;
+	    }
+	    public static long getLong(Scanner sc, String prompt,
+	    	    long min, long max)
+	    	    {
+	    	        long d = 0;
+	    	        boolean isValid = false;
+	    	        while (isValid == false)
+	    	        {
+	    	            d = getLong(sc, prompt);
+	    	            if (d < min)
+	    	                System.out.println(
+	    	                    "Error! Number must be " + min + " or greater.");
+	    	            else if (d > max)
+	    	                System.out.println(
+	    	                    "Error! Number must be " + max + " or less.");
+	    	            else
+	    	                isValid = true;
+	    	        }
+	    	        return d;
+	    	    }
 	    public static String userChoice(Scanner scan) {
 			String s = scan.nextLine();
 			while (!s.equalsIgnoreCase("y") && !s.equalsIgnoreCase("n")) {
